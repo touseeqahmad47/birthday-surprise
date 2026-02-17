@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Birthday Noor 🎉</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: radial-gradient(circle at top, #1f1c2c, #0f0c29);
+            color: white;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-top: 40px;
+            font-size: 40px;
+            text-shadow: 0 0 25px #ff00cc;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background: #ff00cc;
+            color: white;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        #wish {
+            margin-top: 30px;
+            font-size: 24px;
+            padding: 0 20px;
+            min-height: 80px;
+        }
+
+        .heart {
+            position: absolute;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎂 Happy Birthday Noor 🎉</h1>
+    <button onclick="surprise()">Click For Surprise ✨</button>
+
+    <div id="wish"></div>
+
+    <audio id="music" src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.mid"></audio>
+
+    <script>
+        const wishBox = document.getElementById("wish");
+        const music = document.getElementById("music");
+
+        function typeEffect(text) {
+            let i = 0;
+            wishBox.innerHTML = "";
+            let typing = setInterval(() => {
+                if (i < text.length) {
+                    wishBox.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 40);
+        }
+
+        function surprise() {
+            const message = "Noor 💖 You are truly special! May your life shine brighter than stars and your dreams come true this year! 🎉✨ Stay amazing always! 🎂🔥";
+            
+            typeEffect(message);
+
+            music.play();
+
+            confetti({
+                particleCount: 300,
+                spread: 120,
+                origin: { y: 0.6 }
+            });
+
+            for (let i = 0; i < 25; i++) {
+                let heart = document.createElement("div");
+                heart.className = "heart";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+                heart.innerHTML = "💖";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+    </script>
+
+</body>
+</html>
