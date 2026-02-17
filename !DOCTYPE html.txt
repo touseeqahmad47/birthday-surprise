@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Noor's Ultimate Birthday 💖✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: radial-gradient(circle at top, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 38px;
+            text-shadow: 0 0 25px #ff69b4;
+            z-index: 10;
+            position: relative;
+        }
+
+        .cake {
+            font-size: 120px;
+            cursor: pointer;
+            margin-top: 50px;
+            text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4;
+            z-index: 10;
+            position: relative;
+            animation: glowCake 2s infinite alternate;
+        }
+
+        @keyframes glowCake {
+            0% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4; }
+            100% { text-shadow: 0 0 25px #ff69b4, 0 0 50px #ff69b4; }
+        }
+
+        #countdown {
+            font-size: 60px;
+            margin-top: 20px;
+            z-index: 10;
+            position: relative;
+        }
+
+        #wish {
+            font-size: 26px;
+            margin-top: 30px;
+            padding: 0 20px;
+            display: none;
+            z-index: 10;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .key-word {
+            color: #ff69b4;
+            font-weight: bold;
+            animation: glowWord 2s infinite alternate;
+        }
+
+        @keyframes glowWord {
+            0% { text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4; }
+            100% { text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4; }
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: pink;
+            animation: floatUp 6s linear infinite, glowHeart 2s infinite alternate;
+            pointer-events: none;
+            text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        @keyframes glowHeart {
+            0% { text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4; }
+            100% { text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4; }
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: sparkleAnim linear infinite;
+        }
+
+        @keyframes sparkleAnim {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+            100% { transform: translateY(-60px) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="stars"></canvas>
+
+    <h1>🎂 Happy Birthday Noor 🎉</h1>
+
+    <div id="cakeSection">
+        <div class="cake" onclick="lightCandle()">🎂</div>
+        <p>Click the cake to light the candle 🕯️</p>
+    </div>
+
+    <div id="countdown"></div>
+
+    <div id="wish"></div>
+
+    <audio id="music" src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.mid"></audio>
+
+    <script>
+        // ===== STARS BACKGROUND =====
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+        for (let i = 0; i < 150; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                alpha: Math.random(),
+                delta: Math.random() * 0.02 + 0.01
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let star of stars) {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, 2*Math.PI);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+                star.alpha += star.delta;
+                if (star.alpha <= 0 || star.alpha >= 1) star.delta = -star.delta;
+            }
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // ===== CORE LOGIC =====
+        const wishEl = document.getElementById("wish");
+        const music = document.getElementById("music");
+
+        const message = `Noor <span class="key-word">💖</span>, from the first moment I saw you, my world changed. 
+Your <span class="key-word">smile</span>, your <span class="key-word">laugh</span>, your <span class="key-word">kindness</span> — it fills every corner of my heart. 
+I <span class="key-word">love you</span> more than words can say. 
+Every day, I am <span class="key-word">grateful</span> for you… 
+You are my <span class="key-word">joy</span>, my <span class="key-word">peace</span>, my <span class="key-word">everything</span>. 
+May this birthday remind you how deeply you are <span class="key-word">loved</span>, <span class="key-word">cherished</span>, and cared for… 
+<span class="key-word">forever</span> and <span class="key-word">always</span>. 🌟💖`;
+
+        let index = 0;
+
+        function typeSlowly() {
+            if (index < message.length) {
+                let nextChar = message.charAt(index);
+
+                // handle HTML tags
+                if (nextChar === "<") {
+                    const closeTag = message.indexOf(">", index);
+                    wishEl.innerHTML += message.slice(index, closeTag + 1);
+                    index = closeTag + 1;
+                } else {
+                    wishEl.innerHTML += nextChar;
+                    index++;
+                }
+
+                // Very slow typing: ~2–3 minutes
+                setTimeout(typeSlowly, 120); // adjust speed: 120ms per char ~ ~2.5 min
+            }
+        }
+
+        function lightCandle() {
+            document.querySelector(".cake").innerHTML = "🎂🕯️";
+            document.querySelector("#cakeSection p").innerHTML = "Get ready for a magical surprise...";
+            setTimeout(startCountdown, 1000);
+        }
+
+        function startCountdown() {
+            let count = 3;
+            const countdownEl = document.getElementById("countdown");
+            countdownEl.innerHTML = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) countdownEl.innerHTML = count;
+                else {
+                    clearInterval(timer);
+                    countdownEl.innerHTML = "🎉";
+                    revealWish();
+                }
+            }, 1000);
+        }
+
+        function revealWish() {
+            document.getElementById("cakeSection").style.display = "none";
+            wishEl.style.display = "block";
+            music.play();
+            confetti({ particleCount: 400, spread: 150, origin: { y: 0.6 } });
+            startContinuousHearts();
+            startContinuousFireworks();
+            startSparkles();
+            typeSlowly();
+        }
+
+        function startContinuousHearts() {
+            setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+                heart.innerHTML = "💖";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000);
+            }, 500);
+        }
+
+        function startContinuousFireworks() {
+            setInterval(() => {
+                createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight / 2);
+            }, 800);
+        }
+
+        function createFirework(x, y) {
+            const fireworkCount = 12;
+            for (let i = 0; i < fireworkCount; i++) {
+                const p = document.createElement("div");
+                p.className = "firework";
+                p.style.left = x + "px";
+                p.style.top = y + "px";
+                p.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+                p.style.width = "4px";
+                p.style.height = "4px";
+                document.body.appendChild(p);
+
+                let angle = (i / fireworkCount) * 2 * Math.PI;
+                let speed = Math.random() * 3 + 2;
+                let step = 0;
+
+                const anim = setInterval(() => {
+                    step++;
+                    const dx = Math.cos(angle) * speed * step;
+                    const dy = Math.sin(angle) * speed * step;
+                    p.style.left = x + dx + "px";
+                    p.style.top = y + dy + "px";
+                    p.style.opacity -= 0.02;
+                    if (step > 30) {
+                        clearInterval(anim);
+                        p.remove();
+                    }
+                }, 30);
+            }
+        }
+
+        function startSparkles() {
+            setInterval(() => {
+                const sparkle = document.createElement("div");
+                sparkle.className = "sparkle";
+                sparkle.style.left = Math.random() * window.innerWidth + "px";
+                sparkle.style.top = Math.random() * window.innerHeight + "px";
+                sparkle.style.width = (Math.random() * 3 + 1) + "px";
+                sparkle.style.height = sparkle.style.width;
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 4000);
+            }, 200);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+
+</body>
+</html>
